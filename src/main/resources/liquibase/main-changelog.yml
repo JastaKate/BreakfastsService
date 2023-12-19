@@ -1,0 +1,73 @@
+databaseChangeLog:
+  - changeSet:
+      id: breakfast
+      author: Kate
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            - tableExists:
+                tableName: breakfast
+      changes:
+        - createTable:
+            tableName: breakfast
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  autoIncrement: true
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+            ifNotExists: true
+            schemaName: public
+        - createTable:
+            tableName: ingredients
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                  autoIncrement: true
+              - column:
+                  name: product
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: breakfasts_id
+                  type: integer
+                  constraints:
+                    nullable: false
+            ifNotExists: true
+            schemaName: public
+  - changeSet:
+      id: breakfast3
+      author: Kate
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: ingredients
+            baseColumnNames: breakfasts_id
+            referencedTableName: breakfast
+            referencedColumnNames: id
+            constraintName: breakfasts_ingredients_fk
